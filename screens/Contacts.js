@@ -5,11 +5,9 @@ import {
   View,
   FlatList,
   ActivityIndicator,
-  Linking
 } from "react-native";
 import { fetchContacts } from "../utils/api";
 import ContactListItem from "../components/ContactListItem";
-import CallScreen from "./Call2";
 import {
   fetchContactsLoading,
   fetchContactsSuccess,
@@ -24,38 +22,14 @@ const keyExtractor = ({ phone }) => phone;
 const Contacts = ({ navigation }) => {
   const dispatch = useDispatch();
   
-  // Providing a default empty array for contacts
-  // const { contacts = [], loading, error } = useSelector((state) => state.contacts);
-  const { contacts = [], loading, error } = useSelector((state) => {
-    // console.log('Redux state:', state); // Check if contacts are updating correctly
-    // console.log(contacts)
-    return state.contacts;
-  });
-  
-  // useEffect(() => {
-  //   const loadContacts = async () => {
-  //     dispatch(fetchContactsLoading());
-  //     try {
-  //       const contacts = await fetchContacts();
-  //       // console.log('Fetched contacts:', contacts)
-  //       dispatch(fetchContactsSuccess(contacts));
-  //       // alert('reached here') // success here already
-  //     } catch (e) {
-  //       console.error("Error fetching contacts: ", e);
-        
-  //       dispatch(fetchContactsError());
-  //     }
-  //   };
+  const { contacts = [], loading, error } = useSelector((state) => state.contacts);
 
-  //   loadContacts();
-  // }, [dispatch]);
   useEffect(() => {
     const loadContacts = async () => {
       dispatch(fetchContactsLoading());
       try {
         const contacts = await fetchContacts();
-        dispatch(fetchContactsSuccess(contacts));  // Ensure this action is correctly dispatched
-        // console.log(contacts)
+        dispatch(fetchContactsSuccess(contacts));
       } catch (e) {
         dispatch(fetchContactsError());
       }
@@ -63,14 +37,11 @@ const Contacts = ({ navigation }) => {
   
     loadContacts();
   }, [dispatch]);
-  
-  // Safeguard against undefined contacts
-  // const contactsSorted = (contacts || []).slice().sort((a, b) => a.name.localeCompare(b.name));
-  const contactsSorted = (contacts);
+
+  const contactsSorted = contacts;
 
   const renderContact = ({ item }) => {
     const { name, avatar, phone } = item;
-    // console.log(item)
     return (
       <ContactListItem
         name={name}
@@ -84,13 +55,14 @@ const Contacts = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {loading && <ActivityIndicator color="blue" size="large" />}
-      {error && <Text>Error loading contacts...</Text>}
+      {loading && <ActivityIndicator color="#007AFF" size="large" style={styles.loader} />}
+      {error && <Text style={styles.errorText}>Error loading contacts...</Text>}
       {!loading && !error && (
         <FlatList
           data={contactsSorted}
           keyExtractor={keyExtractor}
           renderItem={renderContact}
+          contentContainerStyle={styles.list}
         />
       )}
     </View>
@@ -99,9 +71,22 @@ const Contacts = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
-    justifyContent: "center",
+    backgroundColor: "#F0F4F7",  // Nền màu sáng nhẹ
     flex: 1,
+    paddingHorizontal: 10,  // Căn lề hai bên
+    paddingTop: 20,  // Khoảng cách trên cùng
+  },
+  loader: {
+    alignSelf: "center",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 20,
+  },
+  list: {
+    paddingBottom: 20,  // Thêm khoảng cách dưới cùng
   },
 });
 

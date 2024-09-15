@@ -7,31 +7,30 @@ import Profile from "../screens/Profile";
 import Favorites from "../screens/Favorites";
 import User from "../screens/User";
 import Options from "../screens/Options";
-import CallScreen from "../screens/Call2";
 import { MaterialIcons } from "@expo/vector-icons";
 import colors from "../utils/colors";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-const getTabBarIcon =
-  (icon) =>
-  ({ tintColor }) =>
-    <MaterialIcons name={icon} size={26} style={{ color: tintColor }} />;
+
+// Function to get the tab bar icon
+const getTabBarIcon = (icon) => ({ color, focused }) => (
+  <MaterialIcons
+    name={icon}
+    size={focused ? 30 : 26} // Larger size when focused
+    color={focused ? colors.white : color} // Change color when focused
+  />
+);
+
 const Stack = createNativeStackNavigator();
+
 const ContactsScreens = () => {
   return (
     <Stack.Navigator
       initialRouteName="Contacts"
       screenOptions={{
-        // headerTintColor: "white",
-        // headerStyle: { backgroundColor: "tomato" },
-        // headerTitleAlign: "center",
-        headerShown: false,
+        headerShown: false, // Hide header
       }}
     >
-      <Stack.Screen
-        name="Contacts"
-        component={Contacts}
-        options={{ title: "Contacts" }}
-      />
+      <Stack.Screen name="Contacts" component={Contacts} />
       <Stack.Screen
         name="Profile"
         component={Profile}
@@ -41,23 +40,14 @@ const ContactsScreens = () => {
           return {
             title: name.split(" ")[0],
             headerTintColor: "white",
-            headerStyle: {
-              backgroundColor: colors.blue,
-            },
+            headerStyle: { backgroundColor: colors.blue },
           };
         }}
       />
-      {/* <Stack.Screen
-        name="Call"
-        component={CallScreens}
-        
-        // options={({ route }) => {
-        //   const { contact } = route.params;
-        // }}
-      /> */}
     </Stack.Navigator>
   );
 };
+
 const FavoritesScreens = () => {
   return (
     <Stack.Navigator
@@ -66,19 +56,12 @@ const FavoritesScreens = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen
-        name="Favorites"
-        component={Favorites}
-        options={{ title: "Favorites" }}
-      />
-      <Stack.Screen
-        name="Profile"
-        component={Profile}
-        options={{ title: "Profile" }}
-      />
+      <Stack.Screen name="Favorites" component={Favorites} />
+      <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>
   );
 };
+
 const UserScreens = ({ navigation }) => {
   return (
     <Stack.Navigator initialRouteName="User">
@@ -88,9 +71,7 @@ const UserScreens = ({ navigation }) => {
         options={{
           headerTitle: "Me",
           headerTintColor: "white",
-          headerStyle: {
-            backgroundColor: colors.blue,
-          },
+          headerStyle: { backgroundColor: colors.blue },
           headerRight: () => (
             <MaterialIcons
               name="settings"
@@ -101,24 +82,30 @@ const UserScreens = ({ navigation }) => {
           ),
         }}
       />
-      <Stack.Screen
-        name="Options"
-        component={Options}
-        options={{ title: "Options" }}
-      />
+      <Stack.Screen name="Options" component={Options} />
     </Stack.Navigator>
   );
 };
+
 const Tab = createMaterialBottomTabNavigator();
+
 const TabNavigator = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator
         initialRouteName="ContactsScreens"
-        barStyle={{ backgroundColor: colors.blue }}
+        barStyle={{
+          backgroundColor: colors.blue,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 5 },
+          shadowOpacity: 0.3,
+          shadowRadius: 4,
+          elevation: 10, 
+        }}
         labeled={false}
         activeTintColor={colors.greyLight}
-        inactiveColor={colors.greyDark}
+        inactiveTintColor={colors.greyDark}
+        shifting={true} 
       >
         <Tab.Screen
           name="ContactsScreens"
@@ -131,6 +118,7 @@ const TabNavigator = () => {
           name="FavoritesScreens"
           component={FavoritesScreens}
           options={{
+            tabBarLabel: "Favorites", 
             tabBarIcon: getTabBarIcon("star"),
           }}
         />
@@ -145,6 +133,7 @@ const TabNavigator = () => {
     </NavigationContainer>
   );
 };
+
 export default TabNavigator;
 
 const CallScreens = () => {

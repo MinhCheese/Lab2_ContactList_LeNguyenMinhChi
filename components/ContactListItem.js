@@ -1,14 +1,17 @@
 import React from 'react';
 import { StyleSheet, View, TouchableHighlight, Text, Image } from 'react-native';
 import PropTypes from 'prop-types';
-import colors from '../utils/colors';
 
 const ContactListItem = ({
-  name, avatar, phone, onPress, onLongPress,
+  name,
+  avatar,
+  phone,
+  onPress,
+  onLongPress,
 }) => {
   return (
     <TouchableHighlight
-      underlayColor={colors.grey}
+      underlayColor="#E0E0E0"  // Màu nhấn nhá sáng khi nhấn vào
       style={styles.container}
       onPress={onPress}
       onLongPress={onLongPress}
@@ -16,9 +19,7 @@ const ContactListItem = ({
       <View style={styles.contactInfo}>
         <Image
           style={styles.avatar}
-          source={{
-            uri: avatar,
-          }}
+          source={{ uri: avatar }}
         />
         <View style={styles.details}>
           <Text style={styles.title}>{name}</Text>
@@ -39,36 +40,37 @@ ContactListItem.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    paddingLeft: 24,
+    backgroundColor: '#FFFFFF',  // Màu nền trắng cho danh sách liên hệ
+    borderRadius: 10,  // Bo góc cho container
+    marginVertical: 8,  // Khoảng cách giữa các mục
+    marginHorizontal: 12,  // Căn lề hai bên cho đẹp
+    elevation: 2,  // Đổ bóng nhẹ
   },
   contactInfo: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 16,
-    paddingBottom: 16,
-    paddingRight: 24,
-    borderBottomColor: colors.grey,
+    padding: 16,  // Tăng padding để nội dung không bị chật
     borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#E0E0E0',
   },
   avatar: {
-    borderRadius: 22,
-    width: 44,
-    height: 44,
+    borderRadius: 25,  // Avatar hình tròn
+    width: 50,  // Kích thước avatar lớn hơn
+    height: 50,
+    marginRight: 15,  // Tạo khoảng cách giữa avatar và chi tiết
   },
   details: {
     justifyContent: 'center',
     flex: 1,
-    marginLeft: 20,
   },
   title: {
-    color: colors.black,
-    fontWeight: 'bold',
-    fontSize: 16,
+    color: '#212121',  // Màu chữ đen đậm
+    fontWeight: '600',  // Font chữ đậm hơn
+    fontSize: 18,  // Kích thước chữ lớn hơn
   },
   subtitle: {
-    color: colors.blue,
-    fontSize: 15,
+    color: '#757575',  // Màu chữ xám nhạt hơn cho số điện thoại
+    fontSize: 14,  // Giữ kích thước chữ nhỏ hơn để tạo sự khác biệt
     marginTop: 4,
   },
 });
